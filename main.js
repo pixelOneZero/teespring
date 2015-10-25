@@ -9,11 +9,10 @@ var app = (function() {
 				eleVariation = dom.querySelector('[data-template=variation]'),
 				eleProdImg = dom.getElementById('large-view'),
 				eleProdTitle = dom.getElementById('title'),
-				currentProductId = "1",
+				currentProductId,
+				idFromUrl,
 				self = this;
 
-		this.checkState();
-		
 		request.onreadystatechange = updateView;
 		request.open('GET', 'products.json');
 		request.send(null);
@@ -22,9 +21,22 @@ var app = (function() {
 			if (request.readyState === XMLHttpRequest.DONE) {
 				if (request.status === 200) {
 					prodData = JSON.parse(request.responseText);
+					app.currentProdObj = prodData[0];
 					for (var a=0; a<prodData.length; a++) {
 						eleVariations.innerHTML += eleVariation.outerHTML;
 					}
+					self.setState(app.checkState());
+					for (var i=0; i <prodData.length; i++) {
+						if (prodData[i]['id'] == app.checkState().id) {
+							 setInitialData = (function(idx){
+								return function() {
+									app.currentProdObj = prodData[idx];
+								}
+							})(i);
+							setInitialData();
+						}
+					}
+					updateNav(app.currentProdObj);
 					addHandlers();
 				}
 			}
@@ -40,6 +52,7 @@ var app = (function() {
 					return function() {
 						var prod = prodData[idx];
 						eleProdId[idx].innerText = prod.id;
+						eleProdListItems[idx].setAttribute("data-prod-id", prod.id);
 						eleProdListItems[idx].addEventListener('click', function(e){
 							for (var b=0; b<eleProdListItems.length; b++) {
 								eleProdListItems[b].classList.remove('selected');
@@ -55,7 +68,7 @@ var app = (function() {
 					}
 				})(a);
 				addListener();
-			}
+			} 
 		}
 
 		window.onpopstate = function(e) {
@@ -69,21 +82,22 @@ var app = (function() {
 			eleProdTitle.innerText = prodObj.id + ". " + prodObj.title;
 			eleProdImg.src = prodObj.product_image_url;
 		}
+		
 	}
 
 	this.checkState = function() {
 		var search = window.location.search,
-				idFromUrl = "",
 				start = 0,
 				end = 0,
-				stateObj = {prodId: "1", idParam: "?id=1"};
+				stateObj = {prodId: app.currentProdObj, idParam: "?id=1"};
 
 		if (search !== "") {
 			if (search.indexOf("id=") > -1) {
 				start = search.indexOf("id=") + 3;
 				end = search.indexOf("&") > -1 ? search.indexOf("&", start) : start + 2;
 				idFromUrl = search.substring(start, end);
-				stateObj = { prodObj: app.currentProdObj, idParam: "?id="+self.currentProductId};
+				self.currentProductId = typeof self.currentProductId === "undefined" ? idFromUrl : self.currentProductId;
+				stateObj = { prodObj: app.currentProdObj, idParam: "?id="+self.currentProductId, id: idFromUrl};
 			}
 		}
 		return(stateObj);
