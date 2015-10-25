@@ -24,13 +24,11 @@ var app = (function() {
 					app.currentProdObj = prodData[0];
 					for (var a=0; a<prodData.length; a++) {
 						eleVariations.innerHTML += eleVariation.outerHTML;
-					}
-					self.setState(app.checkState());
-					for (var i=0; i <prodData.length; i++) {
-						if (prodData[i]['id'] == app.checkState().id) {
-							app.currentProdObj = prodData[i];
+						if (prodData[a]['id'] == app.checkState().id) {
+							app.currentProdObj = prodData[a];
 						}
 					}
+					self.setState(app.checkState());
 					updateNav(app.currentProdObj);
 					addHandlers();
 				}
