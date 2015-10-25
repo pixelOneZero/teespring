@@ -1,0 +1,54 @@
+body {
+	font-family: "Helvetica Neue", Helvetica, Arial;
+	padding-bottom:2em;
+	margin:0;
+}
+#product {
+	text-align:center;
+	img {
+		max-width:100%;
+	}
+}
+#variations {
+	width: 10500px;
+}
+h1 {
+	text-align:center;
+	font-weight:normal;
+}
+nav {
+	display:inline-block;
+	ol {
+		margin:0;
+		li {
+			display: inline-block;
+			float:left;
+			cursor: pointer;
+			text-align:center;
+			border:0;
+			figure {
+				margin: 0 33px 20px 33px;
+				div.swatch {
+					background: #e5e5e5;
+					width: 34px;
+					height: 35px;
+				}
+			}
+			figcaption {
+				visibility:hidden;
+			}
+			&.selected, :hover {
+				div.swatch {
+					background: #000;
+				}
+				figcaption {
+					visibility:visible;
+				}
+			}
+		}
+	}
+}
+
+@media (min-width: 960px) {
+
+}
