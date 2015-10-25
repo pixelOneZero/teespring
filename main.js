@@ -28,12 +28,7 @@ var app = (function() {
 					self.setState(app.checkState());
 					for (var i=0; i <prodData.length; i++) {
 						if (prodData[i]['id'] == app.checkState().id) {
-							 setInitialData = (function(idx){
-								return function() {
-									app.currentProdObj = prodData[idx];
-								}
-							})(i);
-							setInitialData();
+							app.currentProdObj = prodData[i];
 						}
 					}
 					updateNav(app.currentProdObj);
