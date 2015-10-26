@@ -24,7 +24,11 @@ var app = (function() {
 					prodData = JSON.parse(request.responseText);
 					app.currentProdObj = prodData[0];
 					for (var a=0; a<prodData.length; a++) {
-						eleVariations.innerHTML += eleVariation.outerHTML;
+						//eleVariations.innerHTML += eleVariation.outerHTML;
+						var li = document.createElement("li");
+						li.setAttribute("data-prod-id", prodData[a].id);
+						eleVariations.appendChild(li);
+						li.innerHTML = '<figure><div class="swatch"></div></figure><figcaption>' + prodData[a].id + '</figcation>';
 						if (prodData[a]['id'] == app.checkState().id) {
 							app.currentProdObj = prodData[a];
 						}
@@ -32,15 +36,14 @@ var app = (function() {
 					self.setState(app.checkState());
 					addHandlers();
 					updateNav(app.currentProdObj);
-					
 				}
 			}
 		}
 
 		function addHandlers() {
-			var eleProdListItems = dom.querySelectorAll('[data-template=variation]'),
-					eleProdSwatch = dom.querySelectorAll('[data-template=variation] .swatch'),
-					eleProdId = dom.querySelectorAll('[data-template=variation] figcaption');
+			var eleProdListItems = dom.querySelectorAll('nav li'),
+					eleProdSwatch = dom.querySelectorAll('nav .swatch'),
+					eleProdId = dom.querySelectorAll('nav figcaption');
 					
 			for (var a=0; a<prodData.length; a++) {
 				addListener = (function(idx){
@@ -50,9 +53,9 @@ var app = (function() {
 						eleProdListItems[idx].setAttribute("data-prod-id", prod.id);
 						eleProdListItems[idx].addEventListener('click', function(e){
 							for (var b=0; b<eleProdListItems.length; b++) {
-								eleProdListItems[b].classList.remove('selected');
+								eleProdListItems[b].className.replace('selected','');
 							}
-							this.classList.add('selected');
+							this.className += ' selected';
 							eleProdImg.src = prod.product_image_url;
 							eleProdTitle.innerHTML = prod.id + ". " + prod.title;
 							self.currentProductId = prod.id;
@@ -73,20 +76,18 @@ var app = (function() {
 
 		function updateNav(prodObj) {
 			var eleNav = dom.getElementById("bottom"),
-					eleProdListItems = dom.querySelectorAll('[data-template=variation]');
+					eleProdListItems = dom.querySelectorAll('li');
 
-			eleNav.style.marginLeft = ("-" + (100*parseInt(prodObj.id) - 70) + "px");
+			eleNav.style.marginLeft = ("-" + (84*parseInt(prodObj.id) - 90) + "px");
 			eleProdTitle.innerHTML = prodObj.id + ". " + prodObj.title;
 			eleProdImg.src = prodObj.product_image_url;
 			for (var b=0; b<eleProdListItems.length; b++) {
-				eleProdListItems[b].classList.remove('selected');
+				eleProdListItems[b].className.replace('selected','');
 				if (eleProdListItems[b].getAttribute('data-prod-id') == prodObj.id) {
-					eleProdListItems[b].classList.add('selected') ;
+					eleProdListItems[b].className += ' selected';
 				}
 			}
-			
 		}
-		
 	}
 
 	this.checkState = function() {
@@ -108,8 +109,10 @@ var app = (function() {
 	}
 
 	this.setState = function(obj) {
-		history.pushState(obj.prodObj, "", obj.idParam);
-		history.replaceState(obj.prodObj, "", obj.idParam);
+		if (history.pushState) {
+			history.pushState(obj.prodObj, "", obj.idParam);
+			history.replaceState(obj.prodObj, "", obj.idParam);
+		}
 	}
 
 	return this;

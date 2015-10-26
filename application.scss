@@ -5,21 +5,26 @@ body {
 }
 #product {
 	text-align:center;
+	box-shadow: 0 8px 4px -6px #eaeaea;
+	margin-bottom: 1.5em;
 	img {
 		max-width:100%;
 	}
 }
 #variations {
-	width: 10500px;
+	/*width: 10500px;*/
 }
 h1 {
 	text-align:center;
+	margin: 1.5em .5em 1.5em .5em;
 	font-weight:normal;
+	display: inline-block;
 }
 nav {
 	display:inline-block;
 	ol {
 		margin:0;
+		display:inline-flex;
 		li {
 			display: inline-block;
 			float:left;
@@ -27,7 +32,7 @@ nav {
 			text-align:center;
 			border:0;
 			figure {
-				margin: 0 33px 20px 33px;
+				margin: 0 25px 20px 25px;
 				div.swatch {
 					background: #e5e5e5;
 					width: 34px;
@@ -50,5 +55,23 @@ nav {
 }
 
 @media (min-width: 960px) {
-
+	#product {
+		top: 8em;
+	  position: absolute;
+	  width: 100%;
+	  box-shadow: 0 -8px 4px -6px #eaeaea;
+	  figure {
+	  	margin-top: 8em;
+	  }
+	  h1 {
+	    position: absolute;
+		  top: .5em;
+		  margin-left: -4.5em;
+	  }
+	}
+	nav {
+		position:absolute;
+		top: 2em;
+		padding-bottom: 1em;
+	}
 }
