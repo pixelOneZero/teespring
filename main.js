@@ -24,7 +24,6 @@ var app = (function() {
 					prodData = JSON.parse(request.responseText);
 					app.currentProdObj = prodData[0];
 					for (var a=0; a<prodData.length; a++) {
-						//eleVariations.innerHTML += eleVariation.outerHTML;
 						var li = document.createElement("li");
 						li.setAttribute("data-prod-id", prodData[a].id);
 						eleVariations.appendChild(li);
@@ -53,7 +52,7 @@ var app = (function() {
 						eleProdListItems[idx].setAttribute("data-prod-id", prod.id);
 						eleProdListItems[idx].addEventListener('click', function(e){
 							for (var b=0; b<eleProdListItems.length; b++) {
-								eleProdListItems[b].className.replace('selected','');
+								eleProdListItems[b].className='';
 							}
 							this.className += ' selected';
 							eleProdImg.src = prod.product_image_url;
@@ -78,11 +77,11 @@ var app = (function() {
 			var eleNav = dom.getElementById("bottom"),
 					eleProdListItems = dom.querySelectorAll('li');
 
-			eleNav.style.marginLeft = ("-" + (84*parseInt(prodObj.id) - 90) + "px");
+			eleNav.style.marginLeft = self.currentProductId != "1" ? ("-" + (84*parseInt(prodObj.id) - 90) + "px") : 0;
 			eleProdTitle.innerHTML = prodObj.id + ". " + prodObj.title;
 			eleProdImg.src = prodObj.product_image_url;
 			for (var b=0; b<eleProdListItems.length; b++) {
-				eleProdListItems[b].className.replace('selected','');
+				eleProdListItems[b].className='';
 				if (eleProdListItems[b].getAttribute('data-prod-id') == prodObj.id) {
 					eleProdListItems[b].className += ' selected';
 				}

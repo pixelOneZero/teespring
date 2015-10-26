@@ -1,7 +1,17 @@
+@mixin no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 body {
 	font-family: "Helvetica Neue", Helvetica, Arial;
 	padding-bottom:2em;
 	margin:0;
+	@include no-select;
 }
 #product {
 	text-align:center;
@@ -12,7 +22,7 @@ body {
 	}
 }
 #variations {
-	/*width: 10500px;*/
+	width: 3450px;
 }
 h1 {
 	text-align:center;
@@ -65,8 +75,11 @@ nav {
 	  }
 	  h1 {
 	    position: absolute;
-		  top: .5em;
-		  margin-left: -4.5em;
+		  top: 0;
+		  left: 35%;
+		  right: 35%;
+		  margin-left:0;
+		  margin-right:0;
 	  }
 	}
 	nav {
