@@ -10,7 +10,7 @@ var app = (function() {
 				eleProdListItems = dom.querySelectorAll('[data-template=variation]'),
 				eleProdImg = dom.getElementById('large-view'),
 				eleProdTitle = dom.getElementById('title'),
-				currentProductId,
+				currentProdId,
 				idFromUrl,
 				self = this;
 
@@ -24,14 +24,18 @@ var app = (function() {
 					prodData = JSON.parse(request.responseText);
 					app.currentProdObj = prodData[0];
 					for (var a=0; a<prodData.length; a++) {
+						// Create and append elements for IE compatibility
 						var li = document.createElement("li");
 						li.setAttribute("data-prod-id", prodData[a].id);
 						eleVariations.appendChild(li);
-						li.innerHTML = '<figure><div class="swatch"></div></figure><figcaption>' + prodData[a].id + '</figcation>';
+						var productId = (function(idx) { return function() { li.innerHTML = eleVariation.innerHTML.replace('==prodId==', prodData[idx].id);}})(a);
+						productId();
+						
 						if (prodData[a]['id'] == app.checkState().id) {
 							app.currentProdObj = prodData[a];
 						}
 					}
+					eleVariations.removeChild(eleVariation);
 					self.setState(app.checkState());
 					addHandlers();
 					updateNav(app.currentProdObj);
@@ -48,8 +52,6 @@ var app = (function() {
 				addListener = (function(idx){
 					return function() {
 						var prod = prodData[idx];
-						eleProdId[idx].innerHTML = prod.id;
-						eleProdListItems[idx].setAttribute("data-prod-id", prod.id);
 						eleProdListItems[idx].addEventListener('click', function(e){
 							for (var b=0; b<eleProdListItems.length; b++) {
 								eleProdListItems[b].className='';
@@ -57,7 +59,7 @@ var app = (function() {
 							this.className += ' selected';
 							eleProdImg.src = prod.product_image_url;
 							eleProdTitle.innerHTML = prod.id + ". " + prod.title;
-							self.currentProductId = prod.id;
+							self.currentProdId = prod.id;
 							app.currentProdObj = prod;
 							self.setState(app.checkState());
 							updateNav(prod);
@@ -69,7 +71,7 @@ var app = (function() {
 		}
 
 		window.onpopstate = function(e) {
-			this.currentProductId = e.state.id;
+			this.currentProdId = e.state.id;
 			updateNav(e.state);
 		};
 
@@ -77,7 +79,7 @@ var app = (function() {
 			var eleNav = dom.getElementById("bottom"),
 					eleProdListItems = dom.querySelectorAll('li');
 
-			eleNav.style.marginLeft = self.currentProductId != "1" ? ("-" + (84*parseInt(prodObj.id) - 90) + "px") : 0;
+			eleNav.style.marginLeft = self.currentProdId != "1" ? ("-" + (84*parseInt(prodObj.id) - 89) + "px") : 0;
 			eleProdTitle.innerHTML = prodObj.id + ". " + prodObj.title;
 			eleProdImg.src = prodObj.product_image_url;
 			for (var b=0; b<eleProdListItems.length; b++) {
@@ -100,8 +102,8 @@ var app = (function() {
 				start = search.indexOf("id=") + 3;
 				end = search.indexOf("&") > -1 ? search.indexOf("&", start) : start + 2;
 				idFromUrl = search.substring(start, end);
-				self.currentProductId = typeof self.currentProductId === "undefined" ? idFromUrl : self.currentProductId;
-				stateObj = { prodObj: app.currentProdObj, idParam: "?id="+self.currentProductId, id: idFromUrl};
+				self.currentProdId = typeof self.currentProdId === "undefined" ? idFromUrl : self.currentProdId;
+				stateObj = { prodObj: app.currentProdObj, idParam: "?id="+self.currentProdId, id: idFromUrl};
 			}
 		}
 		return(stateObj);

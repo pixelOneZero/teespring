@@ -1,3 +1,4 @@
+/* prevent double-clicks & double-taps from highlighting selections */
 @mixin no-select {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -7,22 +8,26 @@
   user-select: none;
 }
 
-body {
-	font-family: "Helvetica Neue", Helvetica, Arial;
-	padding-bottom:2em;
-	margin:0;
-	@include no-select;
+html {
+	overflow-x:hidden;
+	body {
+		font-family: "Helvetica Neue", Helvetica, Arial;
+		padding-bottom:2em;
+		margin:0;
+		@include no-select;
+	}
 }
 #product {
 	text-align:center;
-	box-shadow: 0 8px 4px -6px #eaeaea;
+	box-shadow: 0 2px 4px 0px #eaeaea;
 	margin-bottom: 1.5em;
 	img {
 		max-width:100%;
 	}
 }
-#variations {
-	width: 3450px;
+/* Hide template markup while page loads */
+[data-template] {
+	display:none;
 }
 h1 {
 	text-align:center;
@@ -34,13 +39,18 @@ nav {
 	display:inline-block;
 	ol {
 		margin:0;
-		display:inline-flex;
+		display:inline;
+		white-space: nowrap;
+		float:left;
+		height:4.5em;
+		overflow-y:hidden;
 		li {
-			display: inline-block;
+			display: inline;
 			float:left;
 			cursor: pointer;
 			text-align:center;
 			border:0;
+			white-space: nowrap;
 			figure {
 				margin: 0 25px 20px 25px;
 				div.swatch {
@@ -69,13 +79,16 @@ nav {
 		top: 8em;
 	  position: absolute;
 	  width: 100%;
-	  box-shadow: 0 -8px 4px -6px #eaeaea;
+	  box-shadow: 0 -2px 4px 0px #eaeaea;
 	  figure {
 	  	margin-top: 8em;
+	  	img {
+	  		max-width:30%;
+	  	}
 	  }
 	  h1 {
 	    position: absolute;
-		  top: 0;
+		  top: 1em;
 		  left: 35%;
 		  right: 35%;
 		  margin-left:0;
