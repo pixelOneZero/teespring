@@ -7,6 +7,7 @@ var app = (function() {
 				prodData = [],
 				eleVariations = dom.getElementById('variations'),
 				eleVariation = dom.querySelector('[data-template=variation]'),
+				eleProdListItems = dom.querySelectorAll('[data-template=variation]'),
 				eleProdImg = dom.getElementById('large-view'),
 				eleProdTitle = dom.getElementById('title'),
 				currentProductId,
@@ -29,8 +30,9 @@ var app = (function() {
 						}
 					}
 					self.setState(app.checkState());
-					updateNav(app.currentProdObj);
 					addHandlers();
+					updateNav(app.currentProdObj);
+					
 				}
 			}
 		}
@@ -44,7 +46,7 @@ var app = (function() {
 				addListener = (function(idx){
 					return function() {
 						var prod = prodData[idx];
-						eleProdId[idx].innerText = prod.id;
+						eleProdId[idx].innerHTML = prod.id;
 						eleProdListItems[idx].setAttribute("data-prod-id", prod.id);
 						eleProdListItems[idx].addEventListener('click', function(e){
 							for (var b=0; b<eleProdListItems.length; b++) {
@@ -52,7 +54,7 @@ var app = (function() {
 							}
 							this.classList.add('selected');
 							eleProdImg.src = prod.product_image_url;
-							eleProdTitle.innerText = prod.id + ". " + prod.title;
+							eleProdTitle.innerHTML = prod.id + ". " + prod.title;
 							self.currentProductId = prod.id;
 							app.currentProdObj = prod;
 							self.setState(app.checkState());
@@ -70,10 +72,19 @@ var app = (function() {
 		};
 
 		function updateNav(prodObj) {
-			var eleNav = dom.getElementById("bottom");
+			var eleNav = dom.getElementById("bottom"),
+					eleProdListItems = dom.querySelectorAll('[data-template=variation]');
+
 			eleNav.style.marginLeft = ("-" + (100*parseInt(prodObj.id) - 70) + "px");
-			eleProdTitle.innerText = prodObj.id + ". " + prodObj.title;
+			eleProdTitle.innerHTML = prodObj.id + ". " + prodObj.title;
 			eleProdImg.src = prodObj.product_image_url;
+			for (var b=0; b<eleProdListItems.length; b++) {
+				eleProdListItems[b].classList.remove('selected');
+				if (eleProdListItems[b].getAttribute('data-prod-id') == prodObj.id) {
+					eleProdListItems[b].classList.add('selected') ;
+				}
+			}
+			
 		}
 		
 	}
